@@ -1,9 +1,17 @@
 import React, { useState } from "react";
+import { sendData } from "../api";
 
 const LoginPage = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
+  const handleLogin = async () =>{
 
+    const user = await { "phone_number": phoneNumber, "password": password };
+    let res = await sendData("login",user);
+    console.log(res);
+    sessionStorage.setItem('user_token',res.session_token);
+
+  }
   const validateForm = () => {
     return phoneNumber.length > 0 && password.length > 0;
   };
@@ -26,6 +34,7 @@ const LoginPage = () => {
 
                     <div className="form-outline form-white mb-4">
                       <input
+                        type="tel"
                         className="form-control form-control-lg"
                         placeholder="Phone Number"
                         onChange={(e) => setPhoneNumber(e.target.value)}
@@ -51,6 +60,7 @@ const LoginPage = () => {
                     <button
                       className="btn btn-outline-light btn-lg px-5"
                       type="submit" disabled={!validateForm()}
+                      onClick={handleLogin}
                     >
                       Login
                     </button>
