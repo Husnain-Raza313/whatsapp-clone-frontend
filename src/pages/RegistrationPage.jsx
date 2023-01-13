@@ -1,9 +1,105 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { sendData } from "../api";
 
-const LoginPage = () => {
+const RegistrationPage = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState({
+    name: '',
+    username: '',
+    phoneNumber: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const validateForm = errors => {
+    let valid = true;
+    console.log("in valid form");
+    console.log(errors);
+    Object.values(errors).forEach(function (value) {
+      value.length > 0 && (valid = false) });
+      console.log(valid);
+    return valid;
+  };
+
+  const checkFields = () => {
+    console.log(phoneNumber.length);
+
+    return phoneNumber.length > 0 && password.length > 0 && username.length > 0 && name.length > 0;
+  };
+
+  const handleChange = (event) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+    let formErrors = errors;
+
+    switch (name) {
+      case 'name':
+
+          if(value.length < 5){
+            formErrors.name = 'must be 5 characters or more'
+          }
+          else {
+            formErrors.name = ''
+            setName(value);
+          }
+        break;
+      case 'username':
+            if(value.length < 5){
+              formErrors.username = 'must be 5 characters or more'
+            }
+            else {
+              formErrors.username = ''
+              setUsername(value);
+            }
+        break;
+      case 'phoneNumber':
+          if(value.length < 11){
+              formErrors.phoneNumber = 'Phone Number is not valid!'
+            }
+            else {
+              formErrors.phoneNumber = ''
+              setPhoneNumber(value);
+            }
+        break;
+      case 'password':
+            if(value.length < 8){
+              formErrors.password = 'Password must be at least 8 characters long!'
+            }
+            else {
+              formErrors.password = ''
+              setPassword(value);
+            }
+        break;
+
+      case 'confirmPassword':
+            if(value === password){
+              formErrors.confirmPassword = ''
+              setConfirmPassword(value);
+            }
+            else {
+              console.log(password);
+              formErrors.confirmPassword = 'Password does not match!'
+            }
+        break;
+      default:
+        break;
+    }
+
+    setErrors({...errors, [name]: formErrors[name]});
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if(validateForm(errors)) {
+      console.info('Valid Form')
+    }else{
+      console.log(errors)
+      console.error('Invalid Form')
+    }
+  }
   // const handleLogin = async () =>{
 
   //   const user = await { "phone_number": phoneNumber, "password": password };
@@ -15,19 +111,29 @@ const LoginPage = () => {
   // const validateForm = () => {
   //   return phoneNumber.length > 0 && password.length > 0;
   // };
+
+  // useEffect(() => {
+  //   setErrors({
+  //     name: '',
+  //     username: '',
+  //     phoneNumber: '',
+  //     password: ''
+  //   })
+  // }, []);
+
   return (
     <div
       className="vh-100"
       style={{ backgroundImage: "url('/whatsapp-background.jpeg')" }}
     >
-    <section class="">
-      <div class="px-4 py-5 px-md-5 text-center text-lg-start" >
-        <div class="container p-5 my-5" style={{backgroundColor: "hsl(0, 0%, 96%)"}}>
-          <div class="row gx-lg-5 align-items-center pl-5">
-            <div class="col-lg-7 mb-5 mb-lg-0">
-              <h1 class="m-5 display-3 fw-bold ls-tight">
+    <section className="">
+      <div className="px-4 py-5 px-md-5 text-center text-lg-start" >
+        <div className="container p-5 my-5" style={{backgroundColor: "hsl(0, 0%, 96%)"}}>
+          <div className="row gx-lg-5 align-items-center pl-5">
+            <div className="col-lg-7 mb-5 mb-lg-0">
+              <h1 className="m-5 display-3 fw-bold ls-tight">
                 Registration Page <br />
-                <span class="text-success">Whatsapp Clone</span>
+                <span className="text-success">Whatsapp Clone</span>
               </h1>
               <p className="m-5" style={{color: "hsl(217, 10%, 50.8%)"}}>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -37,34 +143,50 @@ const LoginPage = () => {
               </p>
             </div>
 
-            <div class="col-lg-5 mb-5 mb-lg-0">
-              <div class="card border-0" style={{backgroundColor: "hsl(0, 0%, 96%)"}}>
-                <div class="d-flex justify-content-start ">
+            <div className="col-lg-5 mb-5 mb-lg-0">
+              <div className="card border-0" style={{backgroundColor: "hsl(0, 0%, 96%)"}}>
+                <div className="d-flex justify-content-start ">
                   <form>
 
-                    <div class="row">
-                      <div class="col-md-6 mb-4">
-                        <div class="form-outline">
-                          <input type="text" id="form3Example1" class="form-control" placeholder="Name"  />
+                    <div className="row">
+                      <div className="col-md-6 mb-4">
+                        <div className="form-outline">
+                          <input type="text" id="form3Example1" name="name" onBlur={(e) => handleChange(e)} className="form-control" placeholder="Name"  />
+                          {errors.name != '' &&
+                            <span className='error text-danger'>{errors.name}</span>}
                         </div>
                       </div>
-                      <div class="col-md-6 mb-4">
-                        <div class="form-outline">
-                          <input type="text" id="form3Example2" class="form-control" placeholder="Username"  />
+                      <div className="col-md-6 mb-4">
+                        <div className="form-outline">
+                          <input type="text" id="form3Example2" name="username" onBlur={(e) => handleChange(e)} className="form-control" placeholder="Username"  />
+                          {errors.username != '' &&
+                            <span className='error text-danger'>{errors.username}</span>}
                         </div>
                       </div>
                     </div>
 
-                    <div class="form-outline mb-4">
-                      <input type="tel" id="form3Example3" class="form-control" placeholder="Phone Number" />
+                    <div className="form-outline mb-4">
+                      <input type="tel" id="form3Example3" className="form-control" name="phoneNumber" onBlur={(e) => handleChange(e)} placeholder="Phone Number" />
+                      {errors.phoneNumber != '' &&
+                        <span className='error text-danger'>{errors.phoneNumber}</span>}
                     </div>
 
-                    <div class="form-outline mb-5">
-                      <input type="password" id="form3Example4" class="form-control" placeholder="Password"  />
+                    <div className="form-outline mb-4">
+                      <input type="password" id="form3Example4" className="form-control" name="password" onBlur={(e) => handleChange(e)} placeholder="Password"  />
+                      {errors.password != '' &&
+                        <span className='error text-danger'>{errors.password}</span>}
+                    </div>
+
+                    <div className="form-outline mb-5">
+                      <input type="password" id="form3Example5" className="form-control" name="confirmPassword" onBlur={(e) => handleChange(e)} placeholder="Confirm Password"  />
+                      {errors.confirmPassword != '' &&
+                        <span className='error text-danger'>{errors.confirmPassword}</span>}
                     </div>
 
                     <div className="w-100 d-flex justify-content-center">
-                      <button type="submit" className="btn btn-success btn-lg rounded-1">
+                      <button type="submit" className="btn btn-success btn-lg rounded-1"
+                      disabled={!validateForm(errors) || !checkFields()}
+                      onClick={handleSubmit}>
                         SIGN UP
                       </button>
                     </div>
@@ -80,4 +202,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegistrationPage;
