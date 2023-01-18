@@ -6,6 +6,7 @@ const RegistrationPage = () => {
   const [username, setUsername] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [image, setImage] = useState({});
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({
     name: '',
@@ -94,12 +95,20 @@ const RegistrationPage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if(validateForm(errors)) {
-      console.info('Valid Form')
+      console.info('Valid Form');
+      console.log(image);
     }else{
       console.log(errors)
-      console.error('Invalid Form')
+      console.error('Invalid Form');
     }
   }
+
+  const handleImageChange = e => {
+    console.log(e.target.files[0]);
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
   // const handleLogin = async () =>{
 
   //   const user = await { "phone_number": phoneNumber, "password": password };
@@ -120,6 +129,10 @@ const RegistrationPage = () => {
   //     password: ''
   //   })
   // }, []);
+
+    // useEffect(() => {
+    //   console.log(image);
+    // }, [image]);
 
   return (
     <div
@@ -181,6 +194,10 @@ const RegistrationPage = () => {
                       <input type="password" id="form3Example5" className="form-control" name="confirmPassword" onBlur={(e) => handleChange(e)} placeholder="Confirm Password"  />
                       {errors.confirmPassword != '' &&
                         <span className='error text-danger'>{errors.confirmPassword}</span>}
+                    </div>
+
+                    <div className="form-outline mb-5">
+                      <input type="file" name="newProfilePic" accept="image/png, image/jpeg" onChange={handleImageChange} />
                     </div>
 
                     <div className="w-100 d-flex justify-content-center">
