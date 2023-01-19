@@ -1,138 +1,34 @@
+import { Form, Formik, Field, ErrorMessage, useFormikContext } from "formik";
+import * as yup from "yup";
 import React, { useState, useEffect } from "react";
 import { sendData } from "../api";
 
 const RegistrationPage = () => {
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [username, setUsername] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
+
   const [image, setImage] = useState({});
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState({
-    name: '',
+
+  const defaultValue ={
+    fullname: '',
+    password: '',
     username: '',
     phoneNumber: '',
-    password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    profile: {}
+  }
+  const validationSchema = yup.object().shape({
+    fullname: yup.string().min(8).max(20).required("Please Enter Name"),
+    password: yup.string().min(8).required("Please Enter Password"),
+    phoneNumber: yup.string().min(11).max(15).required("Please Enter Phone Number"),
+    username: yup.string().min(8).max(18).required("Please Enter Username"),
+    confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match')
+
+
   });
-  const validateForm = errors => {
-    let valid = true;
-    console.log("in valid form");
-    console.log(errors);
-    Object.values(errors).forEach(function (value) {
-      value.length > 0 && (valid = false) });
-      console.log(valid);
-    return valid;
-  };
 
-  const checkFields = () => {
-    console.log(phoneNumber.length);
-
-    return phoneNumber.length > 0 && password.length > 0 && username.length > 0 && name.length > 0;
-  };
-
-  const handleChange = (event) => {
-    event.preventDefault();
-    const { name, value } = event.target;
-    let formErrors = errors;
-
-    switch (name) {
-      case 'name':
-
-          if(value.length < 5){
-            formErrors.name = 'must be 5 characters or more'
-          }
-          else {
-            formErrors.name = ''
-            setName(value);
-          }
-        break;
-      case 'username':
-            if(value.length < 5){
-              formErrors.username = 'must be 5 characters or more'
-            }
-            else {
-              formErrors.username = ''
-              setUsername(value);
-            }
-        break;
-      case 'phoneNumber':
-          if(value.length < 11){
-              formErrors.phoneNumber = 'Phone Number is not valid!'
-            }
-            else {
-              formErrors.phoneNumber = ''
-              setPhoneNumber(value);
-            }
-        break;
-      case 'password':
-            if(value.length < 8){
-              formErrors.password = 'Password must be at least 8 characters long!'
-            }
-            else {
-              formErrors.password = ''
-              setPassword(value);
-            }
-        break;
-
-      case 'confirmPassword':
-            if(value === password){
-              formErrors.confirmPassword = ''
-              setConfirmPassword(value);
-            }
-            else {
-              console.log(password);
-              formErrors.confirmPassword = 'Password does not match!'
-            }
-        break;
-      default:
-        break;
-    }
-
-    setErrors({...errors, [name]: formErrors[name]});
-  }
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if(validateForm(errors)) {
-      console.info('Valid Form');
-      console.log(image);
-    }else{
-      console.log(errors)
-      console.error('Invalid Form');
-    }
-  }
-
-  const handleImageChange = e => {
-    console.log(e.target.files[0]);
-    if (e.target.files[0]) {
-      setImage(e.target.files[0]);
-    }
-  };
-  // const handleLogin = async () =>{
-
-  //   const user = await { "phone_number": phoneNumber, "password": password };
-  //   let res = await sendData("login",user);
-  //   console.log(res);
-  //   sessionStorage.setItem('user_token',res.session_token);
-
-  // }
-  // const validateForm = () => {
-  //   return phoneNumber.length > 0 && password.length > 0;
-  // };
-
-  // useEffect(() => {
-  //   setErrors({
-  //     name: '',
-  //     username: '',
-  //     phoneNumber: '',
-  //     password: ''
-  //   })
-  // }, []);
-
-    // useEffect(() => {
-    //   console.log(image);
-    // }, [image]);
+  const handleSubmit = (values) => {
+        values.profile = image;
+        console.log(values);
+     }
 
   return (
     <div
@@ -159,55 +55,52 @@ const RegistrationPage = () => {
             <div className="col-lg-5 mb-5 mb-lg-0">
               <div className="card border-0" style={{backgroundColor: "hsl(0, 0%, 96%)"}}>
                 <div className="d-flex justify-content-start ">
-                  <form>
+                <Formik initialValues={defaultValue} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
+                  <Form>
 
                     <div className="row">
-                      <div className="col-md-6 mb-4">
+                      <div className="col-md-6 mb-2">
                         <div className="form-outline">
-                          <input type="text" id="form3Example1" name="name" onBlur={(e) => handleChange(e)} className="form-control" placeholder="Name"  />
-                          {errors.name != '' &&
-                            <span className='error text-danger'>{errors.name}</span>}
+                          <Field type="text" id="form3Example1" name="fullname" className="form-control" placeholder="Name" />
+                          <p className="text-danger"><ErrorMessage name="fullname"/></p>
                         </div>
                       </div>
-                      <div className="col-md-6 mb-4">
+                      <div className="col-md-6 mb-2">
                         <div className="form-outline">
-                          <input type="text" id="form3Example2" name="username" onBlur={(e) => handleChange(e)} className="form-control" placeholder="Username"  />
-                          {errors.username != '' &&
-                            <span className='error text-danger'>{errors.username}</span>}
+                          <Field type="text" id="form3Example2" name="username" className="form-control" placeholder="Username" />
+                          <p className="text-danger"><ErrorMessage name="username"/></p>
                         </div>
                       </div>
                     </div>
 
                     <div className="form-outline mb-4">
-                      <input type="tel" id="form3Example3" className="form-control" name="phoneNumber" onBlur={(e) => handleChange(e)} placeholder="Phone Number" />
-                      {errors.phoneNumber != '' &&
-                        <span className='error text-danger'>{errors.phoneNumber}</span>}
+                      <Field type="tel" id="form3Example3" className="form-control" name="phoneNumber" placeholder="Phone Number" />
+                      <p className="text-danger"><ErrorMessage name="phoneNumber"/></p>
                     </div>
 
                     <div className="form-outline mb-4">
-                      <input type="password" id="form3Example4" className="form-control" name="password" onBlur={(e) => handleChange(e)} placeholder="Password"  />
-                      {errors.password != '' &&
-                        <span className='error text-danger'>{errors.password}</span>}
+                      <Field type="password" id="form3Example4" className="form-control" name="password" placeholder="Password" />
+                      <p className="text-danger"><ErrorMessage name="password"/></p>
                     </div>
 
                     <div className="form-outline mb-5">
-                      <input type="password" id="form3Example5" className="form-control" name="confirmPassword" onBlur={(e) => handleChange(e)} placeholder="Confirm Password"  />
-                      {errors.confirmPassword != '' &&
-                        <span className='error text-danger'>{errors.confirmPassword}</span>}
+                      <Field type="password" id="form3Example5" className="form-control" name="confirmPassword" placeholder="Confirm Password" />
+                      <p className="text-danger"><ErrorMessage name="confirmPassword"/></p>
                     </div>
 
                     <div className="form-outline mb-5">
-                      <input type="file" name="newProfilePic" accept="image/png, image/jpeg" onChange={handleImageChange} />
-                    </div>
+                    <input id="file" name="profile" type="file" onChange={(event) => {
+                   setImage(event.target.files[0]);
+                 }} />
+                 </div>
 
                     <div className="w-100 d-flex justify-content-center">
-                      <button type="submit" className="btn btn-success btn-lg rounded-1"
-                      disabled={!validateForm(errors) || !checkFields()}
-                      onClick={handleSubmit}>
+                      <button type="submit" className="btn btn-success btn-lg rounded-1">
                         SIGN UP
                       </button>
                     </div>
-                  </form>
+                  </Form>
+                  </Formik>
                 </div>
               </div>
             </div>
