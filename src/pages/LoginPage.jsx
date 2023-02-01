@@ -1,15 +1,21 @@
 import React, { useState } from "react";
 import { sendData } from "../api";
+import { useNavigate } from "react-router-dom";
 
-const LoginPage = () => {
+const LoginPage = (props) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
+  let navigate = useNavigate();
+
   const handleLogin = async () =>{
 
     const user = await { "phone_number": phoneNumber, "password": password };
     let res = await sendData("login",user);
     console.log(res);
-    sessionStorage.setItem('user_token',res.session_token);
+    sessionStorage.setItem('user_token',res.token);
+    sessionStorage.setItem('expiry_time',res.exp);
+    props.setToken(res.token);
+    navigate('/');
 
   }
   const validateForm = () => {
@@ -69,7 +75,7 @@ const LoginPage = () => {
                   <div>
                     <p className="mb-0">
                       Don't have an account?{" "}
-                      <a href="#!" className="text-white-50 fw-bold">
+                      <a className="text-white-50 fw-bold" onClick={ () => { navigate('/registration') }}>
                         Sign Up
                       </a>
                     </p>

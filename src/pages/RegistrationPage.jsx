@@ -1,33 +1,48 @@
-import { Form, Formik, Field, ErrorMessage, useFormikContext } from "formik";
+import { Form, Formik, Field, ErrorMessage, formik, useFormikContext, useFormik } from "formik";
 import * as yup from "yup";
 import React, { useState, useEffect } from "react";
 import { sendData } from "../api";
+import { useNavigate, useParams } from "react-router-dom";
 
 const RegistrationPage = () => {
 
   const [image, setImage] = useState({});
+  let navigate = useNavigate();
 
   const defaultValue ={
-    fullname: '',
+    name: '',
     password: '',
     username: '',
-    phoneNumber: '',
-    confirmPassword: '',
-    profile: {}
+    phone_number: '',
+    password_confirmation: '',
+    image: ""
   }
   const validationSchema = yup.object().shape({
-    fullname: yup.string().min(8).max(20).required("Please Enter Name"),
+    name: yup.string().min(8).max(20).required("Please Enter Name"),
     password: yup.string().min(8).required("Please Enter Password"),
-    phoneNumber: yup.string().min(11).max(15).required("Please Enter Phone Number"),
+    phone_number: yup.string().min(11).max(15).required("Please Enter Phone Number"),
     username: yup.string().min(8).max(18).required("Please Enter Username"),
-    confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match')
+    password_confirmation: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match')
 
 
   });
 
-  const handleSubmit = (values) => {
-        values.profile = image;
+  const handleSubmit = async (values) => {
+
+        let formData = new FormData();
+        formData.append("name", values.name);
+        formData.append("username", values.username);
+        formData.append("password", values.password);
+        formData.append("phone_number", values.phone_number);
+        formData.append("profile_pic", values.image);
+        // values.image = image;
         console.log(values);
+        // let res = await sendData('users',{"user": values});
+        let res = await sendData('users',formData);
+        console.log(res);
+        sessionStorage.setItem('user_token',res.token);
+        sessionStorage.setItem('expiry_time',res.exp);
+        navigate('/');
      }
 
   return (
@@ -56,13 +71,14 @@ const RegistrationPage = () => {
               <div className="card border-0" style={{backgroundColor: "hsl(0, 0%, 96%)"}}>
                 <div className="d-flex justify-content-start ">
                 <Formik initialValues={defaultValue} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
-                  <Form>
+                  { (formProps) => (
+                    <Form>
 
                     <div className="row">
                       <div className="col-md-6 mb-2">
                         <div className="form-outline">
-                          <Field type="text" id="form3Example1" name="fullname" className="form-control" placeholder="Name" />
-                          <p className="text-danger"><ErrorMessage name="fullname"/></p>
+                          <Field type="text" id="form3Example1" name="name" className="form-control" placeholder="Name" />
+                          <p className="text-danger"><ErrorMessage name="name"/></p>
                         </div>
                       </div>
                       <div className="col-md-6 mb-2">
@@ -74,8 +90,8 @@ const RegistrationPage = () => {
                     </div>
 
                     <div className="form-outline mb-4">
-                      <Field type="tel" id="form3Example3" className="form-control" name="phoneNumber" placeholder="Phone Number" />
-                      <p className="text-danger"><ErrorMessage name="phoneNumber"/></p>
+                      <Field type="tel" id="form3Example3" className="form-control" name="phone_number" placeholder="Phone Number" />
+                      <p className="text-danger"><ErrorMessage name="phone_number"/></p>
                     </div>
 
                     <div className="form-outline mb-4">
@@ -84,13 +100,14 @@ const RegistrationPage = () => {
                     </div>
 
                     <div className="form-outline mb-5">
-                      <Field type="password" id="form3Example5" className="form-control" name="confirmPassword" placeholder="Confirm Password" />
-                      <p className="text-danger"><ErrorMessage name="confirmPassword"/></p>
+                      <Field type="password" id="form3Example5" className="form-control" name="password_confirmation" placeholder="Confirm Password" />
+                      <p className="text-danger"><ErrorMessage name="password_confirmation"/></p>
                     </div>
 
                     <div className="form-outline mb-5">
-                    <input id="file" name="profile" type="file" onChange={(event) => {
-                   setImage(event.target.files[0]);
+                    <input id="file" name="image" type="file" accept="image/png, image/jpeg" onChange={(event) => {
+                  // setImage(event.target.files[0]);
+                  formProps.setFieldValue("image", event.target.files[0])
                  }} />
                  </div>
 
@@ -100,6 +117,9 @@ const RegistrationPage = () => {
                       </button>
                     </div>
                   </Form>
+
+                  )}
+
                   </Formik>
                 </div>
               </div>

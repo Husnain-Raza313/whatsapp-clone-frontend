@@ -8,7 +8,7 @@ await axios({
     method: 'get',
     url: `http://localhost:3000/api/v1/${address}`,
     headers: {
-      "token": sessionStorage.getItem('user_token')
+      'Authorization': `Bearer ${sessionStorage.getItem('user_token')}`
     }
   })
     .then(function (response) {
@@ -29,11 +29,7 @@ const sendData = async (address,object) => {
 await axios({
     method: 'post',
     url: `http://localhost:3000/api/v1/${address}`,
-    headers: {
-      "token": sessionStorage.getItem('user_token')
-    },
-    data: object,
-
+    data: object
   })
     .then(function (response) {
      apiResponse= response.data;
