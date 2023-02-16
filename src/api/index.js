@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 let apiResponse;
 
@@ -19,7 +20,8 @@ await axios({
    return await apiResponse;
   }
   catch (e) {
-    window.location.replace(`/errorpage?msg=${e.code}`);
+    // window.location.replace(`/errorpage?msg=${e.code}`);
+    toast.error(e.code);
   }
 
 };
@@ -29,6 +31,9 @@ const sendData = async (address,object) => {
 await axios({
     method: 'post',
     url: `http://localhost:3000/api/v1/${address}`,
+    headers: {
+      'Authorization': `Bearer ${sessionStorage.getItem('user_token')}`
+    },
     data: object
   })
     .then(function (response) {
@@ -38,7 +43,8 @@ await axios({
    return await apiResponse;
   }
   catch (e) {
-    window.location.replace(`/errorpage?msg=${e.code}`);
+    // window.location.replace(`/errorpage?msg=${e.code}`);
+    toast.error(e.code);
   }
 
 };

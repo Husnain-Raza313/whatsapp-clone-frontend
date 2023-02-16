@@ -19,7 +19,7 @@ const HomePage = () => {
   }, [token]);
 
   return (
-    <div>{checkToken() ? <MainPage /> : <LoginPage setToken={setToken}/> }</div>
+    <div>{checkToken() ? <MainPage setToken={setToken} /> : <LoginPage setToken={setToken}/> }</div>
   )
 }
 

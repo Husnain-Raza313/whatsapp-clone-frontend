@@ -1,0 +1,11 @@
+.div-height {
+  height: auto !important;
+}
+.registration-div{
+  height: auto;
+  width: auto;
+  overflow: visible;
+}
+.registration-form-element{
+  height: 95%;
+}

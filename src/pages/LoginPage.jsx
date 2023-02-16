@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { sendData } from "../api";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const LoginPage = (props) => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -14,7 +15,10 @@ const LoginPage = (props) => {
     console.log(res);
     sessionStorage.setItem('user_token',res.token);
     sessionStorage.setItem('expiry_time',res.exp);
+    sessionStorage.setItem("userID", res.user.id);
+    sessionStorage.setItem("user-image", res.profile_pic);
     props.setToken(res.token);
+    toast.success("Successfully logged in");
     navigate('/');
 
   }
