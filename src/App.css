@@ -9,3 +9,6 @@
 .registration-form-element{
   height: 95%;
 }
+.cursor-pointer{
+  cursor: pointer;
+}

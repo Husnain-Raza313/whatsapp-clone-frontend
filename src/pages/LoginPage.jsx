@@ -2,26 +2,28 @@ import React, { useState } from "react";
 import { sendData } from "../api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import InputComponent from "../components/InputComponent";
 
 const LoginPage = (props) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
   let navigate = useNavigate();
 
-  const handleLogin = async () =>{
-
-    const user = await { "phone_number": phoneNumber, "password": password };
-    let res = await sendData("login",user);
-    console.log(res);
-    sessionStorage.setItem('user_token',res.token);
-    sessionStorage.setItem('expiry_time',res.exp);
+  const handleLogin = async () => {
+    const user = await { phone_number: phoneNumber, password: password };
+    let res = await sendData("login", user);
+    if(res.token != null){
+      sessionStorage.setItem("user_token", res.token);
+    sessionStorage.setItem("expiry_time", res.exp);
     sessionStorage.setItem("userID", res.user.id);
     sessionStorage.setItem("user-image", res.profile_pic);
     props.setToken(res.token);
     toast.success("Successfully logged in");
-    navigate('/');
-
-  }
+    navigate("/");
+    }
+    else
+    toast.error(res.message);
+  };
   const validateForm = () => {
     return phoneNumber.length > 0 && password.length > 0;
   };
@@ -41,25 +43,20 @@ const LoginPage = (props) => {
                     <p className="text-white-50 mb-5">
                       Please enter your login and password!
                     </p>
-
-                    <div className="form-outline form-white mb-4">
-                      <input
-                        type="tel"
-                        className="form-control form-control-lg"
-                        placeholder="Phone Number"
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                      />
-                    </div>
-
-                    <div className="form-outline form-white mb-4">
-                      <input
-                        type="password"
-                        id="typePasswordX"
-                        className="form-control form-control-lg"
-                        placeholder="Password"
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                    </div>
+                    <InputComponent
+                      type={"tel"}
+                      placeholder={"Phone Number"}
+                      className={"form-control form-control-lg"}
+                      id={""}
+                      setValue={setPhoneNumber}
+                    />
+                    <InputComponent
+                      type={"password"}
+                      placeholder={"Password"}
+                      className={"form-control form-control-lg"}
+                      id={"typePasswordX"}
+                      setValue={setPassword}
+                    />
 
                     <p className="small mb-5 pb-lg-2">
                       <a className="text-white-50" href="#!">
@@ -69,7 +66,8 @@ const LoginPage = (props) => {
 
                     <button
                       className="btn btn-outline-light btn-lg px-5"
-                      type="submit" disabled={!validateForm()}
+                      type="submit"
+                      disabled={!validateForm()}
                       onClick={handleLogin}
                     >
                       Login
@@ -79,7 +77,12 @@ const LoginPage = (props) => {
                   <div>
                     <p className="mb-0">
                       Don't have an account?{" "}
-                      <a className="text-white-50 fw-bold" onClick={ () => { navigate('/registration') }}>
+                      <a
+                        className="text-white-50 fw-bold cursor-pointer"
+                        onClick={() => {
+                          navigate("/registration");
+                        }}
+                      >
                         Sign Up
                       </a>
                     </p>

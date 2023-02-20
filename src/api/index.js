@@ -1,52 +1,51 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import { URL } from "../helpers/globalVariables";
 
 let apiResponse;
 
 const fetchData = async (address) => {
-  try{
-await axios({
-    method: 'get',
-    url: `http://localhost:3000/api/v1/${address}`,
-    headers: {
-      'Authorization': `Bearer ${sessionStorage.getItem('user_token')}`
-    }
-  })
-    .then(function (response) {
-     apiResponse= response.data;
-
+  try {
+    await axios({
+      method: "get",
+      url: `${URL}${address}`,
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("user_token")}`,
+      },
+    }).then(function (response) {
+      apiResponse = response.data;
     });
 
-   return await apiResponse;
-  }
-  catch (e) {
+    return await apiResponse;
+  } catch (e) {
     // window.location.replace(`/errorpage?msg=${e.code}`);
+    apiResponse = e.response.status;
+    console.log(e.response.status);
     toast.error(e.code);
+    return await apiResponse;
   }
-
 };
 
-const sendData = async (address,object) => {
-  try{
-await axios({
-    method: 'post',
-    url: `http://localhost:3000/api/v1/${address}`,
-    headers: {
-      'Authorization': `Bearer ${sessionStorage.getItem('user_token')}`
-    },
-    data: object
-  })
-    .then(function (response) {
-     apiResponse= response.data;
-
+const sendData = async (address, object) => {
+  try {
+    await axios({
+      method: "post",
+      url: `${URL}${address}`,
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("user_token")}`,
+      },
+      data: object,
+    }).then(function (response) {
+      apiResponse = response.data;
     });
-   return await apiResponse;
-  }
-  catch (e) {
+    return await apiResponse;
+  } catch (e) {
     // window.location.replace(`/errorpage?msg=${e.code}`);
+    apiResponse = e.response.status;
+    console.log(e.response.status);
     toast.error(e.code);
+    return await apiResponse;
   }
-
 };
 
-export {fetchData, sendData};
+export { fetchData, sendData };

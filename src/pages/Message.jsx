@@ -1,55 +1,35 @@
-import React from 'react'
+import React from "react";
+import MessageBar from "../components/MessageBar";
+import MessageInput from "../components/MessageInput";
+import MessagePanel from "../components/MessagePanel";
 
 const Message = (props) => {
   return (
+    <div className="col-sm-8 conversation">
+      <MessageBar contact={props.contact} />
+      <div className="row message main-page-div" id="conversation">
+        {props.messages &&
+          props.messages.map((message, key) => {
+            return props.userID === message.chat_room_participant_id ? (
+              <MessagePanel
+                key={message.id}
+                message={message}
+                user_type={"sender"}
+                contact={props.contact}
+              />
+            ) : (
+              <MessagePanel
+                key={message.id}
+                message={message}
+                user_type={"receiver"}
+                contact={props.contact}
+              />
+            );
+          })}
+      </div>
+      <MessageInput contact={props.contact} />
+    </div>
+  );
+};
 
-    <div className="row message-body border-2 main-page-div" key={props.key}>
-                <div className={`message-main-${props.user_type} main-page-div`}>
-                  <div className={`${props.user_type} main-page-div`}>
-                    <div className="message-text main-page-div">
-                    {props.message.body}
-                    </div>
-                    <span className="message-time pull-right main-page-span">
-                      Sun
-                    </span>
-                  </div>
-                </div>
-              </div>
-    // <div>
-    //           {
-    //             {
-    //           <div className="row message-body border-2" key={props.key}>
-    //                 <div className="message-main-receiver">
-    //                   <div className="receiver">
-    //                     <div className="message-text">
-    //                     <p>hekjsfkljd</p>
-
-    //                     {props.message.body}
-    //                     </div>
-    //                     <span className="message-time pull-right">
-    //                       Sun
-    //                     </span>
-    //                   </div>
-    //                 </div>
-    //               </div>
-    //           }
-    //           else{
-    //                 <div className="row message-body border-2" key={key}>
-    //                 <div className="message-main-sender">
-    //                   <div className="sender">
-    //                     <div className="message-text">
-    //                     {props.message.body}
-    //                     </div>
-    //                     <span className="message-time pull-right">
-    //                       Sun
-    //                     </span>
-    //                   </div>
-    //                 </div>
-    //               </div>
-    //               }
-    //             }
-    //             </div>
-  )
-}
-
-export default Message
+export default Message;
