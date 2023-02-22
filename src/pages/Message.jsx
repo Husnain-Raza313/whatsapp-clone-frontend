@@ -6,7 +6,6 @@ import MessagePanel from "../components/MessagePanel";
 const Message = (props) => {
   return (
     <div className="col-sm-8 conversation">
-      <MessageBar contact={props.contact} />
       <div className="row message main-page-div" id="conversation">
         {props.messages &&
           props.messages.map((message, key) => {
@@ -27,7 +26,7 @@ const Message = (props) => {
             );
           })}
       </div>
-      <MessageInput contact={props.contact} />
+      <MessageInput contact={props.contact} sentMsg={props.sentMsg} setUserID={props.setUserID} setChatroomID={props.setChatroomID} setMessages={props.setMessages} messages={props.messages} setSentMsg={props.setSentMsg} />
     </div>
   );
 };

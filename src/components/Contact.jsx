@@ -1,21 +1,40 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 import { fetchData } from "../api";
 import { IMAGE_URL } from "../helpers/globalVariables";
 
 const Contact = (props) => {
   const getMessages = async (contact) => {
+
     props.setContact(contact);
     console.log(contact.id);
     let res = await fetchData(
       `chat_room_messages?phone_number=${contact.phone_number}`
     );
     console.log(res);
-    props.setMessages(res.messages);
-    props.setUserID(res.sender_chat_id);
-    if (res.messages != null) props.setChatroomID(res.messages[0].chat_room_id);
-    else toast.warning(res.message);
+    if (res.messages != null){
+      props.setMessages(res.messages);
+      props.setUserID(res.sender_chat_id);
+      props.setChatroomID(res.messages[0].chat_room_id);
+    }
+    else{
+      toast.warning(res.message);
+      props.setMessages([])}
   };
+
+  // useEffect(() => {
+  //   if(props.messages == null){
+  //     debugger
+  //   let res = fetchData(
+  //     `chat_room_messages?phone_number=${props.contact.phone_number}`
+  //   );
+  //   console.log(res);
+  //   props.setMessages(res.messages);
+  //   props.setUserID(res.sender_chat_id);
+  //   if (res.messages != null) props.setChatroomID(res.messages[0].chat_room_id);
+  //   else toast.warning(res.message);
+  //   }
+  // }, [props.sentMsg]);
 
   return (
     <div

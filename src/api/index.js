@@ -21,7 +21,8 @@ const fetchData = async (address) => {
     // window.location.replace(`/errorpage?msg=${e.code}`);
     apiResponse = e.response.status;
     console.log(e.response.status);
-    toast.error(e.code);
+    toast.error(e.response.data.message[0]);
+    console.log(e);
     return await apiResponse;
   }
 };
@@ -43,7 +44,8 @@ const sendData = async (address, object) => {
     // window.location.replace(`/errorpage?msg=${e.code}`);
     apiResponse = e.response.status;
     console.log(e.response.status);
-    toast.error(e.code);
+    toast.error(e.response.data.message[0]);
+    console.log(e);
     return await apiResponse;
   }
 };

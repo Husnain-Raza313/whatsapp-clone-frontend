@@ -3,19 +3,18 @@ import { checkToken } from "../helpers/auth";
 import LoginPage from "./LoginPage";
 import MainPage from "./MainPage";
 
-const HomePage = () => {
-  const [token, setToken] = useState(null);
+const HomePage = (props) => {
 
   useEffect(() => {
     console.log("Checking");
-  }, [token]);
+  }, [props.token]);
 
   return (
     <div>
       {checkToken() ? (
-        <MainPage setToken={setToken} />
+        <MainPage setToken={props.setToken} />
       ) : (
-        <LoginPage setToken={setToken} />
+        <LoginPage setToken={props.setToken} />
       )}
     </div>
   );

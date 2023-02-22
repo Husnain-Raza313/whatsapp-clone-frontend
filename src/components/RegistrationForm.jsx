@@ -46,9 +46,11 @@ const RegistrationForm = (props) => {
     // console.log(values);
     // let res = await sendData('users',{"user": values});
     let res = await sendData("users", formData);
-    if (res != '422') {
-    await props.setUser(res.user);
-    await props.setDisplayOtp(true);
+    if (res != '422' && res != '500') {
+      console.log(res);
+    props.setUser(formData);
+    props.setSecKey(res.otp_secret_key);
+    props.setDisplayOtp(true);
     }
     // sessionStorage.setItem('user_token',res.token);
     // sessionStorage.setItem('expiry_time',res.exp);

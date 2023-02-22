@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import Otp from "../components/Otp";
 import RegistrationForm from "../components/RegistrationForm";
 
-const RegistrationPage = () => {
+const RegistrationPage = (props) => {
 
   const [displayOtp, setDisplayOtp] = useState(false);
   const [user, setUser] = useState({});
+  const [secKey, setSecKey] = useState("");
 
   let navigate = useNavigate();
 
@@ -40,13 +41,13 @@ const RegistrationPage = () => {
                   className="card border-0"
                   style={{ backgroundColor: "hsl(0, 0%, 96%)" }}
                 >
-                <RegistrationForm user={ user } setDisplayOtp={setDisplayOtp} setUser={ setUser } />
+                <RegistrationForm user={ user } secKey={ secKey } setSecKey={ setSecKey } setDisplayOtp={setDisplayOtp} setUser={ setUser } />
                 </div>
               </div>
             </div>
             <a className="px-5 text-warning fw-bold cursor-pointer" onClick={()=> navigate('/')}>Back To Login</a>
           </div>
-          <div>{displayOtp && <Otp user={user} />}</div>
+          <div>{displayOtp && <Otp user={user} secKey={ secKey } setToken={props.setToken} />}</div>
         </div>
       </section>
     </div>

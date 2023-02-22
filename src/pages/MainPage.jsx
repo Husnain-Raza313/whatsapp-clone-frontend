@@ -12,10 +12,10 @@ const MainPage = (props) => {
   const [contacts, setContacts] = useState([]);
   const [contact, setContact] = useState(null);
   const [messages, setMessages] = useState([]);
-  const message = useRef("");
   const [userID, setUserID] = useState(null);
   const [chatroomID, setChatroomID] = useState("");
   const [query, setQuery] = useState("");
+  const [sentMsg, setSentMsg] = useState("");
 
   const getData = async () => {
     let res = await fetchData(`users?query=${query}`);
@@ -42,12 +42,9 @@ const MainPage = (props) => {
           },
         }
       );
-      return () => {
-        consumer.disconnect();
-      };
     }
   }, [chatroomID, consumer.subscriptions]);
-
+  console.log(contact);
   return (
     <div className="container app">
       <div className="row app-one">
@@ -67,26 +64,29 @@ const MainPage = (props) => {
                     key={key}
                     contact={contact}
                     setUserID={setUserID}
+                    messages ={messages}
                     setMessages={setMessages}
                     setContact={setContact}
                     setChatroomID={setChatroomID}
+                    sentMsg= {sentMsg}
                   />
                 ))}
             </div>
           </div>
         </div>
 
-        {contact ? (
+
             <Message
-              key={message.id}
-              message={message}
               contact={contact}
               messages={messages}
+              setMessages={setMessages}
               userID={userID}
+              setUserID={setUserID}
+              sentMsg= {sentMsg}
+              setSentMsg={setSentMsg}
+              setChatroomID={setChatroomID}
             />
-        ) : (
-          <div></div>
-        )}
+
       </div>
     </div>
   );

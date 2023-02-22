@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
-import { sendData } from "../api";
+import React, { useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
+import { fetchData, sendData } from "../api";
 
 const MessageInput = (props) => {
   const [message, setMessage] = useState("");
@@ -9,8 +10,20 @@ const MessageInput = (props) => {
     formData.append("body", message);
     formData.append("phone_number", props.contact.phone_number);
     let res = await sendData(`chat_room_messages`, formData);
-    setMessage("");
-    console.log(res);
+    if (res != '422' && res != '500') {
+
+      if(props.messages.length == 0){
+        let res1 = await fetchData(
+          `chat_room_messages?phone_number=${props.contact.phone_number}`
+        );
+        console.log(res1);
+        props.setMessages(res1.messages);
+        props.setUserID(res1.sender_chat_id);
+        if (res1.messages != null) props.setChatroomID(res1.messages[0].chat_room_id);
+        else toast.warning(res1.message);
+        }
+        props.setSentMsg(res);
+    }
   };
 
   return (

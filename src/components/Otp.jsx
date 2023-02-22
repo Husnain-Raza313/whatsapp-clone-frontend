@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { sendData } from "../api";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Otp = (props) => {
   const [otp, setOtp] = useState("");
@@ -10,9 +11,21 @@ const Otp = (props) => {
     // let userParams = Object.assign({user: user});
     // console.log(otp);
     console.log(props.user);
-    let res = await sendData(`users/${otp}/verify_otp`, props.user);
+    console.log(props.secKey);
+    let res = await sendData(`users/${otp}/verify_otp?otp_secret_key=${props.secKey}`, props.user);
     console.log(res);
+    if(res.token != null){
+      sessionStorage.setItem("user_token", res.token);
+    sessionStorage.setItem("expiry_time", res.exp);
+    sessionStorage.setItem("userID", res.user.id);
+    sessionStorage.setItem("user-image", res.profile_pic);
+    props.setToken(res.token);
+    toast.success("Successfully Registered");
     navigate("/");
+    }
+    else{
+      toast.error(res.message);
+    }
   };
   return (
     <div class="container height-100 d-flex justify-content-center align-items-center">
@@ -23,7 +36,7 @@ const Otp = (props) => {
           </h6>{" "}
           <div>
             {" "}
-            <span>A code has been sent to</span> <small>*******9897</small>
+            <span>A code has been sent to</span> <small>{props.user.phone_number}</small>
           </div>{" "}
           <div
             id="otp"
@@ -34,7 +47,7 @@ const Otp = (props) => {
               placeholder="Enter OTP"
               type="text"
               id="first"
-              maxlength="4"
+              maxlength="6"
               onChange={(e) => setOtp(e.target.value)}
             />
           </div>{" "}
