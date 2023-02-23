@@ -33,6 +33,8 @@ const RegistrationForm = (props) => {
     password_confirmation: yup
       .string()
       .oneOf([yup.ref("password"), null], "Passwords must match"),
+    image: yup.mixed().required("You need to provide a file").test('format',
+    'Allowed formats are jpg, png, jpeg', (value) => !value || (value && ['image/jpg', 'image/jpeg', 'image/png'].includes(value.type)))
   });
 
   const handleSubmit = async (values) => {
@@ -46,10 +48,10 @@ const RegistrationForm = (props) => {
     // console.log(values);
     // let res = await sendData('users',{"user": values});
     let res = await sendData("users", formData);
-    if (res != '422' && res != '500') {
-      console.log(res);
+    if (res.status == '200') {
+      console.log(res.data);
     props.setUser(formData);
-    props.setSecKey(res.otp_secret_key);
+    props.setSecKey(res.data.otp_secret_key);
     props.setDisplayOtp(true);
     }
     // sessionStorage.setItem('user_token',res.token);
@@ -151,6 +153,9 @@ const RegistrationForm = (props) => {
                 );
               }}
             />
+            <p className="text-danger">
+            <ErrorMessage name="image" />
+          </p>
           </div>
 
           <div className="w-100 d-flex justify-content-center registration-div">

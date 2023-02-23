@@ -7,6 +7,8 @@ import Contact from "../components/Contact";
 import Search from "../components/Search";
 import Logout from "../components/Logout";
 import { checkToken } from "../helpers/auth";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const MainPage = (props) => {
   const [contacts, setContacts] = useState([]);
@@ -17,10 +19,43 @@ const MainPage = (props) => {
   const [query, setQuery] = useState("");
   const [sentMsg, setSentMsg] = useState("");
 
+
+  let navigate = useNavigate();
+
   const getData = async () => {
+    if(checkToken){
     let res = await fetchData(`users?query=${query}`);
-    console.log(res);
-    setContacts(res);
+    if (res.status == '200') {
+    console.log(res.data);
+    setContacts(res.data);
+    }
+  }
+  else{
+    props.setExpired(true);
+  }
+  };
+
+  const getMessages = async (contact) => {
+    if(checkToken()){
+    setContact(contact);
+    console.log(contact.id);
+    let res = await fetchData(
+      `chat_room_messages?phone_number=${contact.phone_number}`
+    );
+    console.log(res.data);
+    if (res.data.messages != null){
+      setMessages(res.data.messages);
+      setUserID(res.data.sender_chat_id);
+      setChatroomID(res.data.messages[0].chat_room_id);
+    }
+    else{
+      toast.warning(res.message);
+      setMessages([])
+    }
+  }
+    else{
+      props.setExpired(true);
+    }
   };
 
   useEffect(() => {
@@ -44,7 +79,11 @@ const MainPage = (props) => {
       );
     }
   }, [chatroomID, consumer.subscriptions]);
-  console.log(contact);
+
+  useEffect(() => {
+    navigate('/');
+  }, [props.expired]);
+
   return (
     <div className="container app">
       <div className="row app-one">
@@ -57,7 +96,7 @@ const MainPage = (props) => {
               setContacts={setContacts}
               getData={getData}
             />
-            <div className="row sideBar main-page-div">
+            <div className="sideBar main-page-div">
               {contacts &&
                 contacts.map((contact, key) => (
                   <Contact
@@ -69,23 +108,26 @@ const MainPage = (props) => {
                     setContact={setContact}
                     setChatroomID={setChatroomID}
                     sentMsg= {sentMsg}
+                    getMessages={getMessages}
                   />
                 ))}
             </div>
           </div>
         </div>
 
+        { contact ? <Message
+          contact={contact}
+          messages={messages}
+          setMessages={setMessages}
+          userID={userID}
+          setUserID={setUserID}
+          sentMsg= {sentMsg}
+          setSentMsg={setSentMsg}
+          setChatroomID={setChatroomID}
+          getMessages={getMessages}
+        /> : <div></div>
+      }
 
-            <Message
-              contact={contact}
-              messages={messages}
-              setMessages={setMessages}
-              userID={userID}
-              setUserID={setUserID}
-              sentMsg= {sentMsg}
-              setSentMsg={setSentMsg}
-              setChatroomID={setChatroomID}
-            />
 
       </div>
     </div>

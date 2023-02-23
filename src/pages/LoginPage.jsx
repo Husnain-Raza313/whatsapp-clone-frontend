@@ -12,12 +12,13 @@ const LoginPage = (props) => {
   const handleLogin = async () => {
     const user = await { phone_number: phoneNumber, password: password };
     let res = await sendData("login", user);
-    if(res.token != null){
-      sessionStorage.setItem("user_token", res.token);
-    sessionStorage.setItem("expiry_time", res.exp);
-    sessionStorage.setItem("userID", res.user.id);
-    sessionStorage.setItem("user-image", res.profile_pic);
-    props.setToken(res.token);
+    if(res.data.token != null){
+      sessionStorage.setItem("user_token", res.data.token);
+    sessionStorage.setItem("expiry_time", res.data.exp);
+    sessionStorage.setItem("userID", res.data.user.id);
+    sessionStorage.setItem("user-image", res.data.profile_pic);
+    sessionStorage.setItem("user-name",res.data.user.name);
+    props.setToken(res.data.token);
     toast.success("Successfully logged in");
     navigate("/");
     }

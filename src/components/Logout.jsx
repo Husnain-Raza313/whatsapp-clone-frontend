@@ -21,6 +21,7 @@ const Logout = (props) => {
           <img
             src={IMAGE_URL + sessionStorage.getItem("user-image")}
           />
+          <span className="mx-3 fw-bold">{sessionStorage.getItem("user-name")}</span>
         </div>
       </div>
       <div className="col-sm-2 col-xs-2 heading-compose mt-1 pull-right">

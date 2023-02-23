@@ -8,18 +8,16 @@ const Otp = (props) => {
   let navigate = useNavigate();
 
   const verifyOtp = async () => {
-    // let userParams = Object.assign({user: user});
-    // console.log(otp);
     console.log(props.user);
     console.log(props.secKey);
     let res = await sendData(`users/${otp}/verify_otp?otp_secret_key=${props.secKey}`, props.user);
-    console.log(res);
-    if(res.token != null){
-      sessionStorage.setItem("user_token", res.token);
-    sessionStorage.setItem("expiry_time", res.exp);
-    sessionStorage.setItem("userID", res.user.id);
-    sessionStorage.setItem("user-image", res.profile_pic);
-    props.setToken(res.token);
+    console.log(res.data);
+    if(res.data.token != null){
+      sessionStorage.setItem("user_token", res.data.token);
+    sessionStorage.setItem("expiry_time", res.data.exp);
+    sessionStorage.setItem("userID", res.data.user.id);
+    sessionStorage.setItem("user-image", res.data.profile_pic);
+    props.setToken(res.data.token);
     toast.success("Successfully Registered");
     navigate("/");
     }

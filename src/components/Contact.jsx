@@ -4,23 +4,7 @@ import { fetchData } from "../api";
 import { IMAGE_URL } from "../helpers/globalVariables";
 
 const Contact = (props) => {
-  const getMessages = async (contact) => {
 
-    props.setContact(contact);
-    console.log(contact.id);
-    let res = await fetchData(
-      `chat_room_messages?phone_number=${contact.phone_number}`
-    );
-    console.log(res);
-    if (res.messages != null){
-      props.setMessages(res.messages);
-      props.setUserID(res.sender_chat_id);
-      props.setChatroomID(res.messages[0].chat_room_id);
-    }
-    else{
-      toast.warning(res.message);
-      props.setMessages([])}
-  };
 
   // useEffect(() => {
   //   if(props.messages == null){
@@ -39,7 +23,7 @@ const Contact = (props) => {
   return (
     <div
       className="row sideBar-body main-page-div"
-      onClick={() => getMessages(props.contact)}
+      onClick={() => props.getMessages(props.contact)}
     >
       <div className="col-sm-3 col-xs-3 sideBar-avatar">
         <div className="avatar-icon">
