@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+
 import { fetchData, sendData } from "../api";
 import { checkToken } from "../helpers/auth";
 
-const MessageInput = (props) => {
+const MessageInput = ({props}) => {
   const [message, setMessage] = useState("");
 
   const sendMessage = async () => {
@@ -32,6 +33,7 @@ const MessageInput = (props) => {
           className="form-control"
           rows="1"
           id="comment"
+          value ={message}
           onChange={(e) => setMessage(e.target.value)}
         ></textarea>
       </div>

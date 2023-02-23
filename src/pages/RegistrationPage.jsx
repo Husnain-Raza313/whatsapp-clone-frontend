@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import Otp from "../components/Otp";
 import RegistrationForm from "../components/RegistrationForm";
 

@@ -1,5 +1,4 @@
 import React from "react";
-import { fetchData } from "../api";
 
 const Search = (props) => {
   const searchContacts = async (e) => {

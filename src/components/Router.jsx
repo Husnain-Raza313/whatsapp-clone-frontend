@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
 import ErrorPage from "../pages/ErrorPage";
 import HomePage from "../pages/HomePage";
 import RegistrationPage from "../pages/RegistrationPage";

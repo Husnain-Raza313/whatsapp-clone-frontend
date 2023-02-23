@@ -1,8 +1,9 @@
 import React from "react";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
-import { sendData } from "../api";
 import { useNavigate } from "react-router-dom";
+
+import { sendData } from "../api";
 
 const RegistrationForm = (props) => {
   let navigate = useNavigate();

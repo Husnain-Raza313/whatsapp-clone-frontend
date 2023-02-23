@@ -1,4 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
 import { fetchData } from "../api";
 import "./MainPage.css";
 import Message from "./Message";
@@ -7,8 +10,7 @@ import Contact from "../components/Contact";
 import Search from "../components/Search";
 import Logout from "../components/Logout";
 import { checkToken } from "../helpers/auth";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+
 
 const MainPage = (props) => {
   const [contacts, setContacts] = useState([]);

@@ -1,4 +1,5 @@
 import React from "react";
+
 import { IMAGE_URL } from "../helpers/globalVariables";
 
 const MessageBar = (props) => {

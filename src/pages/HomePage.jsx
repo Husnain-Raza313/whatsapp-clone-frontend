@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import { checkToken } from "../helpers/auth";
 import LoginPage from "./LoginPage";
 import MainPage from "./MainPage";
