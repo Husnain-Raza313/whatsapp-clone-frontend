@@ -10,7 +10,7 @@ const Logout = (props) => {
     console.log("signing out");
     sessionStorage.clear();
     props.setToken(null);
-    toast.success("Successfully logged out");
+    toast.error("Successfully logged out");
     navigate("/");
   };
 
@@ -18,10 +18,10 @@ const Logout = (props) => {
     <div className="row heading">
       <div className="col-sm-3 col-xs-3 heading-avatar">
         <div className="heading-avatar-icon">
-          <img
-            src={IMAGE_URL + sessionStorage.getItem("user-image")}
-          />
-          <span className="mx-3 fw-bold">{sessionStorage.getItem("user-name")}</span>
+          <img src={IMAGE_URL + sessionStorage.getItem("user-image")} />
+          <span className="mx-3 fw-bold">
+            {sessionStorage.getItem("user-name")}
+          </span>
         </div>
       </div>
       <div className="col-sm-2 col-xs-2 heading-compose mt-1 pull-right">

@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { checkToken } from "../helpers/auth";
 import LoginPage from "./LoginPage";
 import MainPage from "./MainPage";
@@ -10,15 +8,16 @@ const HomePage = (props) => {
 
   useEffect(() => {
     console.log("Checking");
-    if(!checkToken()){
-      toast.warning("Session Expired");
-    }
   }, [props.token, expired]);
 
   return (
     <div>
       {checkToken() ? (
-        <MainPage setToken={props.setToken} setExpired={setExpired} expired={expired} />
+        <MainPage
+          setToken={props.setToken}
+          setExpired={setExpired}
+          expired={expired}
+        />
       ) : (
         <LoginPage setToken={props.setToken} />
       )}

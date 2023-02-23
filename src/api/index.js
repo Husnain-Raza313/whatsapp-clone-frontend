@@ -18,11 +18,9 @@ const fetchData = async (address) => {
 
     return await apiResponse;
   } catch (e) {
-    // window.location.replace(`/errorpage?msg=${e.code}`);
     apiResponse = e.response;
     console.log(e.response.status);
     toast.error(e.response.data.message);
-    console.log(e);
     return await apiResponse;
   }
 };
@@ -41,11 +39,9 @@ const sendData = async (address, object) => {
     });
     return await apiResponse;
   } catch (e) {
-    // window.location.replace(`/errorpage?msg=${e.code}`);
     apiResponse = e.response;
     console.log(e.response.status);
     toast.error(e.response.data.message);
-    console.log(e);
     return await apiResponse;
   }
 };

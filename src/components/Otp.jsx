@@ -8,20 +8,15 @@ const Otp = (props) => {
   let navigate = useNavigate();
 
   const verifyOtp = async () => {
-    console.log(props.user);
-    console.log(props.secKey);
-    let res = await sendData(`users/${otp}/verify_otp?otp_secret_key=${props.secKey}`, props.user);
+    let res = await sendData(
+      `users/${otp}/verify_otp?otp_secret_key=${props.secKey}`,
+      props.user
+    );
     console.log(res.data);
-    if(res.data.token != null){
-      sessionStorage.setItem("user_token", res.data.token);
-    sessionStorage.setItem("expiry_time", res.data.exp);
-    sessionStorage.setItem("userID", res.data.user.id);
-    sessionStorage.setItem("user-image", res.data.profile_pic);
-    props.setToken(res.data.token);
-    toast.success("Successfully Registered");
-    navigate("/");
-    }
-    else{
+    if (res.status == "200") {
+      toast.success("Successfully Registered");
+      navigate("/");
+    } else {
       toast.error(res.message);
     }
   };
@@ -31,11 +26,11 @@ const Otp = (props) => {
         <div class="card p-2 text-center">
           <h6>
             Please enter the one time password <br /> to verify your account
-          </h6>{" "}
+          </h6>
           <div>
-            {" "}
-            <span>A code has been sent to</span> <small>{props.user.phone_number}</small>
-          </div>{" "}
+            <span>A code has been sent to</span>{" "}
+            <small>{props.user.phone_number}</small>
+          </div>
           <div
             id="otp"
             class="inputs d-flex flex-row justify-content-center mt-2 h-25"

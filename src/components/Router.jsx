@@ -10,7 +10,10 @@ const Router = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePage setToken={setToken} />} />
-      <Route path="/registration" element={<RegistrationPage setToken={setToken} />} />
+      <Route
+        path="/registration"
+        element={<RegistrationPage setToken={setToken} />}
+      />
       <Route path="*" element={<ErrorPage />} />
     </Routes>
   );

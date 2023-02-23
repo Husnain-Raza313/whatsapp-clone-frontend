@@ -5,11 +5,10 @@ const Search = (props) => {
   const searchContacts = async (e) => {
     props.setQuery(e.target.value);
 
-    if(e.target.value.length == 1 && e.code == "Backspace"){
+    if (e.target.value.length == 1 && e.code == "Backspace") {
       props.getData();
     }
   };
-
 
   return (
     <div className="searchBox d-flex align-content-start justify-content-start">
@@ -20,7 +19,7 @@ const Search = (props) => {
           placeholder="Search"
           aria-label="Search"
           aria-describedby="search-addon"
-          onKeyDown={(e) => searchContacts(e) }
+          onKeyDown={(e) => searchContacts(e)}
         />
         <button
           type="button"

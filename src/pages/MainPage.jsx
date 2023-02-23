@@ -19,41 +19,37 @@ const MainPage = (props) => {
   const [query, setQuery] = useState("");
   const [sentMsg, setSentMsg] = useState("");
 
-
   let navigate = useNavigate();
 
   const getData = async () => {
-    if(checkToken){
-    let res = await fetchData(`users?query=${query}`);
-    if (res.status == '200') {
-    console.log(res.data);
-    setContacts(res.data);
+    if (checkToken()) {
+      let res = await fetchData(`users?query=${query}`);
+      if (res.status == "200") {
+        console.log(res.data);
+        setContacts(res.data);
+      }
+    } else {
+      props.setExpired(true);
     }
-  }
-  else{
-    props.setExpired(true);
-  }
   };
 
   const getMessages = async (contact) => {
-    if(checkToken()){
-    setContact(contact);
-    console.log(contact.id);
-    let res = await fetchData(
-      `chat_room_messages?phone_number=${contact.phone_number}`
-    );
-    console.log(res.data);
-    if (res.data.messages != null){
-      setMessages(res.data.messages);
-      setUserID(res.data.sender_chat_id);
-      setChatroomID(res.data.messages[0].chat_room_id);
-    }
-    else{
-      toast.warning(res.message);
-      setMessages([])
-    }
-  }
-    else{
+    if (checkToken()) {
+      setContact(contact);
+      console.log(contact.id);
+      let res = await fetchData(
+        `chat_room_messages?phone_number=${contact.phone_number}`
+      );
+      console.log(res.data);
+      if (res.data.messages != null) {
+        setMessages(res.data.messages);
+        setUserID(res.data.sender_chat_id);
+        setChatroomID(res.data.messages[0].chat_room_id);
+      } else {
+        toast.warning(res.data.message);
+        setMessages([]);
+      }
+    } else {
       props.setExpired(true);
     }
   };
@@ -81,7 +77,7 @@ const MainPage = (props) => {
   }, [chatroomID, consumer.subscriptions]);
 
   useEffect(() => {
-    navigate('/');
+    navigate("/");
   }, [props.expired]);
 
   return (
@@ -103,11 +99,11 @@ const MainPage = (props) => {
                     key={key}
                     contact={contact}
                     setUserID={setUserID}
-                    messages ={messages}
+                    messages={messages}
                     setMessages={setMessages}
                     setContact={setContact}
                     setChatroomID={setChatroomID}
-                    sentMsg= {sentMsg}
+                    sentMsg={sentMsg}
                     getMessages={getMessages}
                   />
                 ))}
@@ -115,20 +111,21 @@ const MainPage = (props) => {
           </div>
         </div>
 
-        { contact ? <Message
-          contact={contact}
-          messages={messages}
-          setMessages={setMessages}
-          userID={userID}
-          setUserID={setUserID}
-          sentMsg= {sentMsg}
-          setSentMsg={setSentMsg}
-          setChatroomID={setChatroomID}
-          getMessages={getMessages}
-        /> : <div></div>
-      }
-
-
+        {contact ? (
+          <Message
+            contact={contact}
+            messages={messages}
+            setMessages={setMessages}
+            userID={userID}
+            setUserID={setUserID}
+            sentMsg={sentMsg}
+            setSentMsg={setSentMsg}
+            setChatroomID={setChatroomID}
+            getMessages={getMessages}
+          />
+        ) : (
+          <div></div>
+        )}
       </div>
     </div>
   );
