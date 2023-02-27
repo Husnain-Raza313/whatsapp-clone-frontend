@@ -16,7 +16,7 @@ const MainPage = (props) => {
   const [contacts, setContacts] = useState([]);
   const [contact, setContact] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [userID, setUserID] = useState(null);
+  const [user, setUser] = useState(null);
   const [chatroomID, setChatroomID] = useState("");
   const [query, setQuery] = useState("");
   const [sentMsg, setSentMsg] = useState("");
@@ -31,7 +31,7 @@ const MainPage = (props) => {
         setContacts(res.data);
       }
     } else {
-      props.setExpired(true);
+      props.setExpired(!props.expired);
     }
   };
 
@@ -45,14 +45,14 @@ const MainPage = (props) => {
       console.log(res.data);
       if (res.data.messages != null) {
         setMessages(res.data.messages);
-        setUserID(res.data.sender_chat_id);
+        setUser(res.data.sender);
         setChatroomID(res.data.messages[0].chat_room_id);
       } else {
         toast.warning(res.data.message);
         setMessages([]);
       }
     } else {
-      props.setExpired(true);
+      props.setExpired(!props.expired);
     }
   };
 
@@ -100,7 +100,7 @@ const MainPage = (props) => {
                   <Contact
                     key={key}
                     contact={contact}
-                    setUserID={setUserID}
+                    setUser={setUser}
                     messages={messages}
                     setMessages={setMessages}
                     setContact={setContact}
@@ -118,8 +118,8 @@ const MainPage = (props) => {
             contact={contact}
             messages={messages}
             setMessages={setMessages}
-            userID={userID}
-            setUserID={setUserID}
+            user={user}
+            setUser={setUser}
             sentMsg={sentMsg}
             setSentMsg={setSentMsg}
             setChatroomID={setChatroomID}

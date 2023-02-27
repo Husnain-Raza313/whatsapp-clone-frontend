@@ -11,7 +11,7 @@ const Message = (props) => {
       <div className="message main-page-div" id="conversation">
         {props.messages &&
           props.messages.map((message, key) => {
-            return props.userID === message.chat_room_participant_id ? (
+            return props.user.id === message.chat_room_participant_id ? (
               <MessagePanel
                 key={message.id}
                 message={message}
@@ -32,7 +32,7 @@ const Message = (props) => {
         contact={props.contact}
         getMessages={props.getMessages}
         sentMsg={props.sentMsg}
-        setUserID={props.setUserID}
+        setUser={props.setUser}
         setChatroomID={props.setChatroomID}
         setMessages={props.setMessages}
         messages={props.messages}
