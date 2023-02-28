@@ -5,20 +5,15 @@ const Search = (props) => {
     props.setQuery(e.target.value);
 
     if (e.target.value.length == 0 && e.code == "Backspace") {
-      props.setQuery("");
       props.getData();
     }
-  }
+  };
 
   return (
     <div className="searchBox d-flex align-content-start justify-content-start">
       <div className="input-group">
         <input
-          type="search"
           className="form-control rounded"
-          placeholder="Search"
-          aria-label="Search"
-          aria-describedby="search-addon"
           onKeyDown={(e) => searchContacts(e)}
         />
         <button

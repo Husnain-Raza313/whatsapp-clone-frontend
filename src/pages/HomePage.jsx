@@ -7,7 +7,9 @@ import MainPage from "./MainPage";
 
 const HomePage = (props) => {
   const [expired, setExpired] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({
+    profile_pic: null,
+  });
 
   useEffect(() => {
     console.log("Checking");

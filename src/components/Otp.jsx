@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 
 import { sendData } from "../api";
 
-
 const Otp = (props) => {
   const [otp, setOtp] = useState("");
   let navigate = useNavigate();
@@ -18,8 +17,6 @@ const Otp = (props) => {
     if (res.status == "200") {
       toast.success("Successfully Registered");
       navigate("/");
-    } else {
-      toast.error(res.message);
     }
   };
   return (

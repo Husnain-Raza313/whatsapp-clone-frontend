@@ -4,6 +4,7 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 
 import { sendData } from "../api";
+import { toast } from "react-toastify";
 
 const RegistrationForm = (props) => {
   let navigate = useNavigate();
@@ -16,12 +17,15 @@ const RegistrationForm = (props) => {
     password_confirmation: "",
     image: "",
   };
+  const phoneRegExp =
+    /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/;
 
   const validationSchema = yup.object().shape({
     name: yup.string().min(8).max(20).required("Please Enter Name"),
     password: yup.string().min(8).required("Please Enter Password"),
     phone_number: yup
       .string()
+      .matches(phoneRegExp, "Phone number is not valid")
       .min(11)
       .max(15)
       .required("Please Enter Phone Number"),
@@ -31,7 +35,6 @@ const RegistrationForm = (props) => {
       .oneOf([yup.ref("password"), null], "Passwords must match"),
     image: yup
       .mixed()
-      .required("You need to provide a file")
       .test(
         "format",
         "Allowed formats are jpg, png, jpeg",

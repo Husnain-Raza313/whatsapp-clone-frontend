@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
 
-import { fetchData, sendData } from "../api";
+import { sendData } from "../api";
 import { checkToken } from "../helpers/auth";
 import { chatName } from "../helpers/chatRoomName";
 
@@ -15,10 +14,6 @@ const MessageInput = (props) => {
       formData.append("chat_room_name", chatName(props.contact.phone_number));
       let res = await sendData(`chat_room_messages`, formData);
       if (res.status == "200") {
-        if (props.messages.length == 0) {
-          props.getMessages(props.contact);
-        }
-        props.setSentMsg(res.data);
         setMessage("");
       }
     }
@@ -34,7 +29,7 @@ const MessageInput = (props) => {
           className="form-control"
           rows="1"
           id="comment"
-          value ={message}
+          value={message}
           onChange={(e) => setMessage(e.target.value)}
         ></textarea>
       </div>

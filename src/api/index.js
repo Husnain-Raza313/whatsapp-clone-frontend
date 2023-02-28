@@ -1,6 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 import { URL } from "../helpers/globalVariables";
+import { showError } from "../helpers/showError";
 
 let apiResponse;
 
@@ -15,14 +16,12 @@ const fetchData = async (address) => {
     }).then(function (response) {
       apiResponse = response;
     });
-
-    return await apiResponse;
   } catch (e) {
     apiResponse = e.response;
     console.log(e.response.status);
-    toast.error(e.response.data.message);
-    return await apiResponse;
+    showError(e.response.data.message);
   }
+  return await apiResponse;
 };
 
 const sendData = async (address, object) => {
@@ -37,13 +36,14 @@ const sendData = async (address, object) => {
     }).then(function (response) {
       apiResponse = response;
     });
-    return await apiResponse;
   } catch (e) {
     apiResponse = e.response;
     console.log(e.response.status);
-    toast.error(e.response.data.message);
-    return await apiResponse;
+    // toast.error(e.response.message[0]);
+    console.log(e.response);
+    showError(e.response.data.message);
   }
+  return await apiResponse;
 };
 
 export { fetchData, sendData };

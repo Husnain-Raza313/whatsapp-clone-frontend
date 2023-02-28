@@ -23,9 +23,10 @@ const LoginPage = (props) => {
       sessionStorage.setItem("user-phone-number", res.data.user.phone_number);
       props.setToken(res.data.token);
       props.setUser(res.data.user);
+      props.setUser({ profile_pic: res.data.profile_pic });
       toast.success("Successfully logged in");
       navigate("/");
-    } else toast.error(res.data.message);
+    }
   };
   const validateForm = () => {
     return phoneNumber.length > 0 && password.length > 0;

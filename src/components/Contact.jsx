@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 
-import { fetchData } from "../api";
-import { IMAGE_URL } from "../helpers/globalVariables";
+import { profileImage } from "../helpers/profileImage";
 
 const Contact = (props) => {
   return (
@@ -12,7 +11,7 @@ const Contact = (props) => {
     >
       <div className="col-sm-3 col-xs-3 sideBar-avatar">
         <div className="avatar-icon">
-          <img src={IMAGE_URL + props.contact.profile_pic} />
+          <img src={profileImage(props.contact)} />
         </div>
       </div>
       <div className="col-sm-9 col-xs-9 sideBar-main">

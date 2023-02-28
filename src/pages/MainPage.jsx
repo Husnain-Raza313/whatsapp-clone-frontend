@@ -11,7 +11,7 @@ import Search from "../components/Search";
 import Logout from "../components/Logout";
 import { checkToken } from "../helpers/auth";
 import { chatName } from "../helpers/chatRoomName";
-
+import NewChat from "../components/NewChat";
 
 const MainPage = (props) => {
   const [contacts, setContacts] = useState([]);
@@ -37,19 +37,20 @@ const MainPage = (props) => {
   };
 
   const startConversation = async () => {
-
     if (checkToken()) {
-      alert(props.user.id);
-      let res = await fetchData(`chat_room_messages/${contact.id}?chat_room_name=${chatName(contact.phone_number)}`);
+      let res = await fetchData(
+        `chat_room_messages/${contact.id}?chat_room_name=${chatName(
+          contact.phone_number
+        )}`
+      );
       if (res.status == "200") {
         console.log(res.data);
         setChatroomID(res.data.chat_room_id);
+        setSender(res.data.sender);
       }
     } else {
       props.setExpired(!props.expired);
     }
-
-
   };
 
   const getMessages = async (contact) => {
@@ -62,6 +63,7 @@ const MainPage = (props) => {
       );
       console.log(res.data);
       if (res.data.messages != null) {
+        console.log("Hemlo");
         setMessages(res.data.messages);
         console.log(res.data.sender);
         setSender(res.data.sender);
@@ -78,6 +80,7 @@ const MainPage = (props) => {
   useEffect(() => {
     if (checkToken()) {
       getData();
+      console.log(chatroomID);
       consumer.subscriptions.create(
         {
           channel: "ChatRoomChannel",
@@ -95,22 +98,20 @@ const MainPage = (props) => {
         }
       );
     }
-  }, [chatroomID, consumer.subscriptions]);
+  }, [chatroomID]);
 
   useEffect(() => {
     navigate("/");
   }, [props.expired]);
 
-  useEffect(() => {
-
-  }, [contact]);
+  useEffect(() => {}, [contact]);
 
   return (
     <div className="container app">
       <div className="row app-one">
         <div className="col-sm-4 side">
           <div className="side-one">
-            <Logout setToken={props.setToken} />
+            <Logout setToken={props.setToken} user={props.user} />
             <Search
               query={query}
               setQuery={setQuery}
@@ -136,27 +137,21 @@ const MainPage = (props) => {
         </div>
 
         {contact ? (
-            chatroomID ? (
-              <Message
-                contact={contact}
-                messages={messages}
-                setMessages={setMessages}
-                sender={sender}
-                setSender={setSender}
-                sentMsg={sentMsg}
-                setSentMsg={setSentMsg}
-                setChatroomID={setChatroomID}
-                getMessages={getMessages}
-              />
-            ) : (
-              <div className="col-sm-8 conversation d-flex justify-content-center align-content-center">
-              <div className="h-25 w-50 conversation-msg">
-              <b>Start Conversation With {contact.name}</b>
-              <button className="btn btn-primary btn-lg w-auto h-auto" onClick={startConversation}>Start Chatting</button>
-              </div>
-              </div>
-            )
-
+          chatroomID ? (
+            <Message
+              contact={contact}
+              messages={messages}
+              setMessages={setMessages}
+              sender={sender}
+              setSender={setSender}
+              sentMsg={sentMsg}
+              setSentMsg={setSentMsg}
+              setChatroomID={setChatroomID}
+              getMessages={getMessages}
+            />
+          ) : (
+            <NewChat startConversation={startConversation} contact={contact} />
+          )
         ) : (
           <div></div>
         )}

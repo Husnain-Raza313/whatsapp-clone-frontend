@@ -2,10 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import { IMAGE_URL } from "../helpers/globalVariables";
+import { profileImage } from "../helpers/profileImage";
 
 const Logout = (props) => {
   let navigate = useNavigate();
+  console.log(props.user);
 
   const signOut = () => {
     console.log("signing out");
@@ -19,7 +20,7 @@ const Logout = (props) => {
     <div className="row heading">
       <div className="col-sm-3 col-xs-3 heading-avatar">
         <div className="heading-avatar-icon">
-          <img src={IMAGE_URL + sessionStorage.getItem("user-image")} />
+          <img src={profileImage(props.user)} />
           <span className="mx-3 fw-bold">
             {sessionStorage.getItem("user-name")}
           </span>
