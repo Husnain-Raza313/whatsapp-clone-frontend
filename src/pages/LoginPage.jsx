@@ -20,7 +20,9 @@ const LoginPage = (props) => {
       sessionStorage.setItem("userID", res.data.user.id);
       sessionStorage.setItem("user-image", res.data.profile_pic);
       sessionStorage.setItem("user-name", res.data.user.name);
+      sessionStorage.setItem("user-phone-number", res.data.user.phone_number);
       props.setToken(res.data.token);
+      props.setUser(res.data.user);
       toast.success("Successfully logged in");
       navigate("/");
     } else toast.error(res.data.message);

@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const Search = (props) => {
   const searchContacts = async (e) => {
     props.setQuery(e.target.value);
 
-    if (e.target.value.length == 1 && e.code == "Backspace") {
+    if (e.target.value.length == 0 && e.code == "Backspace") {
+      props.setQuery("");
       props.getData();
     }
-  };
+  }
 
   return (
     <div className="searchBox d-flex align-content-start justify-content-start">

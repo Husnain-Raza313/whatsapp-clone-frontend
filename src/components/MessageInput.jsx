@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 
 import { fetchData, sendData } from "../api";
 import { checkToken } from "../helpers/auth";
+import { chatName } from "../helpers/chatRoomName";
 
 const MessageInput = (props) => {
   const [message, setMessage] = useState("");
@@ -11,7 +12,7 @@ const MessageInput = (props) => {
     if (message != "" && checkToken()) {
       let formData = new FormData();
       formData.append("body", message);
-      formData.append("phone_number", props.contact.phone_number);
+      formData.append("chat_room_name", chatName(props.contact.phone_number));
       let res = await sendData(`chat_room_messages`, formData);
       if (res.status == "200") {
         if (props.messages.length == 0) {

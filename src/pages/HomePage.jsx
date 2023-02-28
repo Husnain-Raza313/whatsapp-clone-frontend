@@ -7,6 +7,7 @@ import MainPage from "./MainPage";
 
 const HomePage = (props) => {
   const [expired, setExpired] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     console.log("Checking");
@@ -18,10 +19,12 @@ const HomePage = (props) => {
         <MainPage
           setToken={props.setToken}
           setExpired={setExpired}
+          setUser={setUser}
           expired={expired}
+          user={user}
         />
       ) : (
-        <LoginPage setToken={props.setToken} />
+        <LoginPage setToken={props.setToken} setUser={setUser} />
       )}
     </div>
   );

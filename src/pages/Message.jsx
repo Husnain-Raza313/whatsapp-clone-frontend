@@ -11,7 +11,7 @@ const Message = (props) => {
       <div className="message main-page-div" id="conversation">
         {props.messages &&
           props.messages.map((message, key) => {
-            return props.user.id === message.chat_room_participant_id ? (
+            return props.sender.id === message.chat_room_participant_id ? (
               <MessagePanel
                 key={message.id}
                 message={message}
