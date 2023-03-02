@@ -12,6 +12,7 @@ import Logout from "../components/Logout";
 import { checkToken } from "../helpers/auth";
 import { chatName } from "../helpers/chatRoomName";
 import NewChat from "../components/NewChat";
+import { addSubscription, checkSubscription } from "../helpers/subscriptions";
 
 const MainPage = (props) => {
   const [contacts, setContacts] = useState([]);
@@ -21,6 +22,7 @@ const MainPage = (props) => {
   const [chatroomID, setChatroomID] = useState("");
   const [query, setQuery] = useState("");
   const [sentMsg, setSentMsg] = useState("");
+  const [check, setCheck] = useState("");
 
   let navigate = useNavigate();
 
@@ -38,6 +40,7 @@ const MainPage = (props) => {
 
   const startConversation = async () => {
     if (checkToken()) {
+      if(getMessages(contact)){
       let res = await fetchData(
         `chat_room_messages/${contact.id}?chat_room_name=${chatName(
           contact.phone_number
@@ -47,14 +50,30 @@ const MainPage = (props) => {
         console.log(res.data);
         setChatroomID(res.data.chat_room_id);
         setSender(res.data.sender);
+        getSubscription(res.data.chat_room_id);
+
       }
+    }
     } else {
       props.setExpired(!props.expired);
     }
   };
 
+  const getSubscription = (chat_room_id) =>{
+    if (!checkSubscription(chat_room_id)){
+      alert("checckk");
+      addSubscription(chat_room_id);
+      setCheck(!check);
+    }
+  };
+
   const getMessages = async (contact) => {
     if (checkToken()) {
+      // consumer.disconnect(
+      //   {
+      //     channel: "ChatRoomChannel",
+      //     chat_room_id: chatroomID
+      //   });
       setContact(contact);
       setChatroomID(null);
       console.log(contact.id);
@@ -63,24 +82,44 @@ const MainPage = (props) => {
       );
       console.log(res.data);
       if (res.data.messages != null) {
-        console.log("Hemlo");
         setMessages(res.data.messages);
         console.log(res.data.sender);
         setSender(res.data.sender);
         setChatroomID(res.data.messages[0].chat_room_id);
+        getSubscription(res.data.messages[0].chat_room_id);
+        return res.data.messages
       } else {
-        toast.warning(res.data.message);
         setMessages([]);
+        return null
       }
     } else {
       props.setExpired(!props.expired);
     }
   };
+  // if (checkToken()){
+  // consumer.subscriptions.create(
+  //   {
+  //     channel: "ChatRoomChannel",
+  //     chat_room_id: chatroomID,
+  //   },
+  //   {
+  //     connected: () => console.log("connected"),
+  //     disconnected: () => console.log("disconnected"),
+  //     received: (data) => {
+  //       console.log(data);
+  //       if (data !== null) {
+  //         setMessages((messages) => [...messages, data]);
+  //       }
+  //     },
+  //   }
+  // );
+  // }
 
   useEffect(() => {
     if (checkToken()) {
       getData();
       console.log(chatroomID);
+
       consumer.subscriptions.create(
         {
           channel: "ChatRoomChannel",
@@ -91,6 +130,7 @@ const MainPage = (props) => {
           disconnected: () => console.log("disconnected"),
           received: (data) => {
             console.log(data);
+            alert("hemlo");
             if (data !== null) {
               setMessages((messages) => [...messages, data]);
             }
@@ -98,13 +138,33 @@ const MainPage = (props) => {
         }
       );
     }
-  }, [chatroomID]);
+    // return () => {
+    //   alert("HImmm");
+    //    consumer.disconnect(
+    //     {
+    //       channel: "ChatRoomChannel",
+    //       chat_room_id: chatroomID
+    //     }
+    //    )
+    //  };
+
+  }, [check]);
 
   useEffect(() => {
     navigate("/");
   }, [props.expired]);
 
-  useEffect(() => {}, [contact]);
+  useEffect(() => {
+    getData();
+  }, [contact, messages]);
+
+  useEffect(() => {
+    // let user = JSON.parse(sessionStorage.getItem("user"))
+    // props.setUser(user);
+    // alert(props.user.id);
+    if(sessionStorage.getItem("user-image") !== null)
+    props.setUser({ profile_pic: sessionStorage.getItem("user-image") });
+  },[]);
 
   return (
     <div className="container app">

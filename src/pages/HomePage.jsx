@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { checkToken } from "../helpers/auth";
@@ -11,8 +12,11 @@ const HomePage = (props) => {
     profile_pic: null,
   });
 
+  let navigate = useNavigate();
+  
   useEffect(() => {
     console.log("Checking");
+    navigate('/');
   }, [props.token, expired]);
 
   return (
