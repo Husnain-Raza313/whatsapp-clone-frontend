@@ -393,6 +393,7 @@ body {
 .sender {
   float: right;
   width: auto !important;
+  max-width: 60%;
   height: auto;
   background: #dcf8c6;
   border-radius: 10px 10px 0 10px;
