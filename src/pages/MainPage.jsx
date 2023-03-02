@@ -22,7 +22,7 @@ const MainPage = (props) => {
   const [chatroomID, setChatroomID] = useState("");
   const [query, setQuery] = useState("");
   const [sentMsg, setSentMsg] = useState("");
-  const [check, setCheck] = useState("");
+  const [checkSub, setCheckSub] = useState(true);
 
   let navigate = useNavigate();
 
@@ -61,19 +61,13 @@ const MainPage = (props) => {
 
   const getSubscription = (chat_room_id) =>{
     if (!checkSubscription(chat_room_id)){
-      alert("checckk");
       addSubscription(chat_room_id);
-      setCheck(!check);
+      setCheckSub(!checkSub);
     }
   };
 
   const getMessages = async (contact) => {
     if (checkToken()) {
-      // consumer.disconnect(
-      //   {
-      //     channel: "ChatRoomChannel",
-      //     chat_room_id: chatroomID
-      //   });
       setContact(contact);
       setChatroomID(null);
       console.log(contact.id);
@@ -96,24 +90,6 @@ const MainPage = (props) => {
       props.setExpired(!props.expired);
     }
   };
-  // if (checkToken()){
-  // consumer.subscriptions.create(
-  //   {
-  //     channel: "ChatRoomChannel",
-  //     chat_room_id: chatroomID,
-  //   },
-  //   {
-  //     connected: () => console.log("connected"),
-  //     disconnected: () => console.log("disconnected"),
-  //     received: (data) => {
-  //       console.log(data);
-  //       if (data !== null) {
-  //         setMessages((messages) => [...messages, data]);
-  //       }
-  //     },
-  //   }
-  // );
-  // }
 
   useEffect(() => {
     if (checkToken()) {
@@ -130,7 +106,6 @@ const MainPage = (props) => {
           disconnected: () => console.log("disconnected"),
           received: (data) => {
             console.log(data);
-            alert("hemlo");
             if (data !== null) {
               setMessages((messages) => [...messages, data]);
             }
@@ -138,17 +113,8 @@ const MainPage = (props) => {
         }
       );
     }
-    // return () => {
-    //   alert("HImmm");
-    //    consumer.disconnect(
-    //     {
-    //       channel: "ChatRoomChannel",
-    //       chat_room_id: chatroomID
-    //     }
-    //    )
-    //  };
 
-  }, [check]);
+  }, [checkSub]);
 
   useEffect(() => {
     navigate("/");

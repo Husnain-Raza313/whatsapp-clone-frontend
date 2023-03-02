@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 
 import InputComponent from "../components/InputComponent";
 import { sendData } from "../api";
+import userInfo from "../helpers/userInfo";
 
 const LoginPage = (props) => {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -15,14 +16,7 @@ const LoginPage = (props) => {
     let res = await sendData("login", user);
     if (res.data.token != null) {
       console.log(res.data.exp);
-      sessionStorage.setItem("user_token", res.data.token);
-      sessionStorage.setItem("expiry_time", res.data.exp);
-      sessionStorage.setItem("userID", res.data.user.id);
-      if(res.data.profile_pic)
-      sessionStorage.setItem("user-image", res.data.profile_pic);
-      sessionStorage.setItem("user-name", res.data.user.name);
-      sessionStorage.setItem("user-phone-number", res.data.user.phone_number);
-      sessionStorage.setItem('subscriptions',JSON.stringify([]));
+      userInfo(res);
       props.setToken(res.data.token);
       props.setUser(res.data.user);
       props.setUser({ profile_pic: res.data.profile_pic });
