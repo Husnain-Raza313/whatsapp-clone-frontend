@@ -21,13 +21,13 @@ const RegistrationForm = (props) => {
     /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/;
 
   const validationSchema = yup.object().shape({
-    name: yup.string().min(8).max(20).required("Please Enter Name"),
+    name: yup.string().required("Please Enter Name"),
     password: yup.string().min(8).required("Please Enter Password"),
     phone_number: yup
       .string()
       .matches(phoneRegExp, "Phone number is not valid")
-      .min(11)
-      .max(15)
+      .min(11, "Phone number should be 11 characters long")
+      .max(15, "Phone number should be less than 16 characters")
       .required("Please Enter Phone Number"),
     username: yup.string().min(8).max(18).required("Please Enter Username"),
     password_confirmation: yup

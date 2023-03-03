@@ -393,7 +393,7 @@ body {
 .sender {
   float: right;
   width: auto !important;
-  max-width: 60%;
+  max-width: 100%;
   height: auto;
   background: #dcf8c6;
   border-radius: 10px 10px 0 10px;
@@ -401,6 +401,7 @@ body {
   font-size: 12px;
   text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
   word-wrap: break-word;
+  margin-top: 5px;
 
 }
 
